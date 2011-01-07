@@ -1,0 +1,22 @@
+dlvhex - Mathematica plugin
+=======================
+
+Installation
+------------
+Requirements:
+- dlvhex
+- Mathematica
+
+Installation:
+- ./bootstrap
+- ./configure
+- ./make
+- ./sudo make install
+
+configure options:
+--enable-userinstall  Installs plugin into home directory
+--with-mathematica    specifies directory where to find Mathematica CompilerAdditions
+
+Standard-Path to Mathematica CompilerAdditions in configure.ac:
+/usr/local/Wolfram/Mathematica/7.0/SystemFiles/Links/MathLink/DeveloperKit/Linux/CompilerAdditions
+
