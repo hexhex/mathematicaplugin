@@ -32,7 +32,7 @@ namespace dlvhex {
 	// second parameter: the predicate of vector b
 	//
 	addInputPredicate();
-	setOutputArity(3);
+	setOutputArity(1);
         
       }
 
@@ -56,16 +56,16 @@ namespace dlvhex {
 	    if(parms[0].isSymbol() && parms[1].isSymbol()) 
 	      {
 		matrixPred = parms[0].getString();
-		std::cout << "Matrixpraedikat: " << matrixPred << std::endl;
+		//std::cout << "Matrixpraedikat: " << matrixPred << std::endl;
 		vectorPred = parms[1].getString();
-		std::cout << "Vektorpraedikat: " << vectorPred << std::endl;
+		//std::cout << "Vektorpraedikat: " << vectorPred << std::endl;
 	      }
 	    else
 	      {
 		throw PluginError("Wrong type of arguments");
 	      }
 	  }
-	
+	//get complete Interpretation of given predicates in query
 	AtomSet totalInt = query.getInterpretation();
 	AtomSet matrixInt;
 	AtomSet vectorInt;
@@ -76,11 +76,10 @@ namespace dlvhex {
 	  }
 	else 
 	  {
-	    //std::cout << "Anzahl von Atomen in Gesamtinterpretation: " << totalInt.size() << std::endl; 
+	    // separate interpretation into facts of first predicate (matrix)
 	    totalInt.matchPredicate(matrixPred, matrixInt);
-	    //std::cout << "Anzahl von Atomen in Matrixinterpretation: " << matrixInt.size() << std::endl;
+	    // and into facts of second predicate (vector)
 	    totalInt.matchPredicate(vectorPred, vectorInt);
-	    //std::cout << "Anzahl von Atomen in Vectorinterpretation: " << vectorInt.size() << std::endl;
 	  }
 	
 	int mLines = 0;
@@ -105,7 +104,6 @@ namespace dlvhex {
 	std::string expr = toString(matrix, mLines, mColumns, vektor, vLines);
 
 	Tuple out = calculateSolution(argc, argv, expr);
-	std::cout << "Anzahl Terme in Tuple out: " << out.size() << std::endl;
 	     
         answer.addTuple(out);
       }      
@@ -248,7 +246,7 @@ namespace dlvhex {
 	    }
 	  expression += vektor[vLines-1];
 	  expression += "}]";
-	  std::cout << expression << std::endl;
+	  std::cout << "Expression: " << expression << std::endl;
 	  return expression;
 	}
 
@@ -266,7 +264,7 @@ namespace dlvhex {
 	 MLPutFunction (MathLinkSingleton::instance()->lp, "ToExpression", 1);
 	 MLPutString (MathLinkSingleton::instance()->lp, expression.c_str());
 	 MLEndPacket (MathLinkSingleton::instance()->lp);
-	 std::cout << "Alle Daten an Mathematica gesendet, warte auf Antwort" << std::endl;
+
 	 if (!MLFlush(MathLinkSingleton::instance()->lp))
 	     throw PluginError("Error while flushing link to mathematica");
 
@@ -277,49 +275,70 @@ namespace dlvhex {
 	   }
       
 	 int errcount=0;
-	 std::string temp="";
+	 std::string solution = "{";
+	 std::string temp = "";
+
+	 //process result from mathematica, as long as data can be found on the link
 	 while (MLReady(MathLinkSingleton::instance()->lp))
 	{
+	  // check type of the next part of the result-expression
 	  switch(MLGetNext(MathLinkSingleton::instance()->lp)) 
 	    {
+	      //next part of expression: integer
 	    case MLTKINT:
 	      int data;
 	      if(!MLGetInteger32(MathLinkSingleton::instance()->lp, &data))
 		 throw PluginError("Error while reading integer from mathlink");
-	      std::cout << "Integer von MathLink gelesen: " << data << std::endl;
+	      //std::cout << "Integer von MathLink gelesen: " << data << std::endl;
+	      solution += intToString(data);
+	      solution += ",";
 	      break;
 
+	      //next part of expression: double
 	    case MLTKREAL:
 	      double real;
 		 if(!MLGetReal64(MathLinkSingleton::instance()->lp, &real))
 		   throw PluginError("Error while reading double from mathlink");
-	      std::cout << "Double von MathLink gelesen: " << real << std::endl;
-	      temp = doubleToString(real);
-	      out.push_back(Term(temp, true));
+		 //std::cout << "Double von MathLink gelesen: " << real << std::endl;
+	      solution += doubleToString(real);
+	      solution += ",";
+	     
 	      break;
-
+	      
+	      //next part of expression: string
 	    case MLTKSTR:
 	      const char *str;
 		 if(!MLGetString(MathLinkSingleton::instance()->lp, &str))
 		   throw PluginError("Error while reading string from mathlink");
-	      std::cout << "String von MathLink gelesen: " << str << std::endl;
+		 //std::cout << "String von MathLink gelesen: " << str << std::endl;
+	      temp = str;
+	      solution += temp;
+	      solution += ",";
 	      MLReleaseString(MathLinkSingleton::instance()->lp, str);
 	      break;
 
+	      //next part of expression: symbol
 	    case MLTKSYM:
 	      const char *symbol;
 		 if(!MLGetSymbol(MathLinkSingleton::instance()->lp, &symbol))
 		   throw PluginError("Error while reading symbol from mathlink");
-	      std::cout << "Symbol von MathLink gelesen: " << symbol << std::endl;
+		 //std::cout << "Symbol von MathLink gelesen: " << symbol << std::endl;
+	      temp = symbol;
+	      solution += temp;
+	      solution += ",";
 	      MLReleaseSymbol(MathLinkSingleton::instance()->lp, symbol);   
 	      break;
 
+	      //next part of expression: function
 	    case MLTKFUNC:
 	      const char *func;
 	      int n;
 	      if(!MLGetFunction(MathLinkSingleton::instance()->lp, &func, &n))
 		   throw PluginError("Error while reading function from mathlink");
-		    std::cout << "Funktion " << func << " mit " << n << " Argumenten von MathLink gelesen: " << std::endl;
+	      //std::cout << "Funktion " << func << " mit " << n << " Argumenten von MathLink gelesen: " << std::endl;
+		    temp = func;
+		    solution += temp;
+		    solution += ":";
 		       MLReleaseSymbol(MathLinkSingleton::instance()->lp, func);   
 	      break;
 
@@ -334,10 +353,17 @@ namespace dlvhex {
 	  if(errcount) break;
 	  }
 
+	 //exit Mathematica and close link
 	 MLPutFunction (MathLinkSingleton::instance()->lp, "Exit", 0);
 	 MathLinkSingleton::instance()->closeLink();
 	 MathLinkSingleton::instance()->deinit(); 
 	 
+	 solution = solution.erase(solution.size()-1, 1);
+	 solution += "}";
+	 
+	 //put solutionstring on output-vector
+	 out.push_back(Term(solution, true));
+
 	 if (errcount)
 	   throw PluginError("Error occured while reading from mathlink");
 	 else
@@ -349,6 +375,13 @@ namespace dlvhex {
       {
 	std::stringstream ss;
 	ss << real;
+	return ss.str();
+      }
+      
+      std::string intToString(int number)
+      {
+	std::stringstream ss;
+	ss << number;
 	return ss.str();
       }
       

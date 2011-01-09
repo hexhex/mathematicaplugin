@@ -1,0 +1,24 @@
+2011-01-09 Annemarie Goldmann  <annemarie.goldmann@chello.at>
+
+	* examples/error.hex: added more examples to test mathematica output
+	* examples/noSolution.hex: Likewise.
+	* examples/symbols.hex: Likewise.
+	* examples/undetermined.hex: Likewise.
+
+	* src/mathematicaplugin.cpp: changed output-arity to 1, output-type to string
+
+2011-01-07 Annemarie Goldmann <annemarie.goldmann@chello.at>
+
+	First commit of Mathematicaplugin - external Atom linearSolve is working for basic example:
+	* AUTHORS
+   	* ChangeLog
+   	* Makefile.am
+   	* README
+   	* bootstrap.sh
+   	* configure.ac
+   	* examples/matheTest.hex
+   	* include/Makefile.am
+   	* include/mathlinksingleton.hpp
+   	* src/Makefile.am
+   	* src/mathematicaplugin.cpp
+   	* src/mathlinksingleton.cpp

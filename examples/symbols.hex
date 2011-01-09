@@ -1,0 +1,6 @@
+matrix(1,1,"a"). matrix(1,2,"b").
+matrix(2,1,"c"). matrix(2,2,"d").
+
+b(1,"e"). b(2,"f").
+
+vektor(X) :- &linearSolve[matrix,b](X).
