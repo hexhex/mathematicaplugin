@@ -3,4 +3,4 @@ matrix(2,1,"4"). matrix(2,2,"5"). matrix(2,3,"6").
 
 b(1,"6"). b(2,"15").
 
-vektor(X) :- &linearSolve[matrix,b](X).
+vektor(X,Y,Z) :- &uniqueLinSolve[matrix,b](X,Y,Z).

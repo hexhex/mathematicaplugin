@@ -1,3 +1,17 @@
+2011-01-28 Annemarie Goldmann <annemarie.goldmann@chello.at>
+	
+	
+	* src/mathematicaplugin.cpp: changed output-arity to 3, changed external atom to uniqueLinSolve, calculate solution only if a unique solution exists (by checking ranks first), solutions for symbolic equation systems in polish notation
+
+	* examples/bIsMatrix.hex: changed output arity to 3
+	* examples/error.hex: Likewise. 
+	* examples/matheTest.hex: Likewise.
+	* examples/noSolution.hex: Likewise.
+	* examples/symbols.hex: Likewise.
+	* examples/undetermined.hex: Likewise.
+	* examples/vectorWithArity3.hex: Likewise.
+
+
 2011-01-09 Annemarie Goldmann  <annemarie.goldmann@chello.at>
 
 	* examples/error.hex: added more examples to test mathematica output
