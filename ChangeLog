@@ -1,5 +1,14 @@
 2011-02-08 Annemarie Goldmann <annemarie.goldmann@chello.at>
 
+	* examples/tests/answerset_compare.py: new file from Peter Schueller to improve the testsuite
+	* examples/tests/run-dlvhex-tests.sh: likewise
+	* examples/tests/mathematicaplugintests.test: added negative testcase
+	* examples/tests/error.err: likewise
+	* examples/Makefile.am
+
+
+2011-02-08 Annemarie Goldmann <annemarie.goldmann@chello.at>	
+
 	added testsuite for automated answer-set-tests
 	* examples/Makefile.am
 	* examples/tests/noSolution.out

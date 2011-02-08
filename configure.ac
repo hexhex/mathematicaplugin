@@ -1,4 +1,4 @@
-AC_PREREQ([2.61])
+AC_PREREQ([2.67])
 AC_INIT([dlvhex-mathematicaplugin],[0.1.0],[annemarie.goldmann@chello.at])
 AC_CONFIG_SRCDIR([src/mathematicaplugin.cpp])
 
@@ -35,9 +35,12 @@ AC_HEADER_STDBOOL
 AC_C_CONST
 
 # Checks for library functions.
-AC_LIBTOOL_DLOPEN # we build a module library
+_LT_SET_OPTION([LT_INIT],[dlopen])
+AC_DIAGNOSE([obsolete],[AC_LIBTOOL_DLOPEN: Remove this warning and the call to _LT_SET_OPTION when you
+put the `dlopen' option into LT_INIT's first parameter.])
+ # we build a module library
 AC_DISABLE_STATIC # we don't need a static library
-AC_PROG_LIBTOOL
+LT_INIT
 
 #
 # check for other libraries here
