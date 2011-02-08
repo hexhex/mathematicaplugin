@@ -4,3 +4,4 @@
 ../symbols.hex symbols.out
 ../undetermined.hex undetermined.out
 ../vectorWithArity3.hex vectorWithArity3.out
+../error.hex error.err
