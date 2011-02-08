@@ -1,0 +1,6 @@
+../bIsMatrix.hex bIsMatrix.out
+../matheTest.hex matheTest.out
+../noSolution.hex noSolution.out
+../symbols.hex symbols.out
+../undetermined.hex undetermined.out
+../vectorWithArity3.hex vectorWithArity3.out

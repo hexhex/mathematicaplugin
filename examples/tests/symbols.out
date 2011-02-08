@@ -1,0 +1,1 @@
+{vektor(1,1,"Times Power Plus Times -1 b c Times a d -1 Plus Times d e Times -1 b f"), vektor(2,1,"Times Power Plus Times b c Times -1 a d -1 Plus Times c e Times -1 a f"), b(1,"e"), b(2,"f"), matrix(1,1,"a"), matrix(1,2,"b"), matrix(2,1,"c"), matrix(2,2,"d")}

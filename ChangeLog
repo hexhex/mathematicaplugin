@@ -1,3 +1,17 @@
+2011-02-08 Annemarie Goldmann <annemarie.goldmann@chello.at>
+
+	added testsuite for automated answer-set-tests
+	* examples/Makefile.am
+	* examples/tests/noSolution.out
+	* examples/tests/vectorWithArity3.out
+	* examples/tests/undetermined.out
+	* examples/tests/bIsMatrix.out
+	* examples/tests/symbols.out
+	* examples/tests/matheTest.out
+	* examples/tests/mathematicaplugintests.test
+	* examples/tests/run-dlvhex-tests.sh
+
+
 2011-01-28 Annemarie Goldmann <annemarie.goldmann@chello.at>
 	
 	
