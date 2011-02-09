@@ -1,7 +1,13 @@
 ../bIsMatrix.hex bIsMatrix.out
 ../matheTest.hex matheTest.out
 ../noSolution.hex noSolution.out
+../noSolutionLinSolve.hex noSolution.out
 ../symbols.hex symbols.out
+../symbolsLinSolve.hex symbolsLinSolve.out
+../underdet2LinSolve.hex underdet2LinSolve.out
+../underdetermined2.hex underdetermined2.out
+../underdetLinSolve.hex underdetLinSolve.out
 ../undetermined.hex undetermined.out
 ../vectorWithArity3.hex vectorWithArity3.out
 ../error.hex error.err
+../errorLinSolve.hex error.err

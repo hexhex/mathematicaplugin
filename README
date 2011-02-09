@@ -5,7 +5,7 @@ Installation
 ------------
 Requirements:
 - dlvhex
-- Mathematica
+- Mathematica (testet with version 7.0)
 
 Installation:
 - ./bootstrap
@@ -19,4 +19,56 @@ configure options:
 
 Standard-Path to Mathematica CompilerAdditions in configure.ac:
 /usr/local/Wolfram/Mathematica/7.0/SystemFiles/Links/MathLink/DeveloperKit/Linux/CompilerAdditions
+
+
+Usage
+------
+
+dlvhex - Mathematica plugin provides 2 external atoms to solve matrix equation systems of the form 
+A.x = b, where 
+A is the coefficient matrix, 
+b is the given target vector or matrix and 
+x ist the solution vector or matrix calculated by mathematica. 
+
+
+&linearSolve[matrixpredicate, vectorpredicate](X,Y,Z).
+
+&uniqueLinSolve[matrixpredicate, vectorpredicate](X,Y,Z). 
+
+
+
+linearSolve 
+provides solutions for equation systems where an unique solution exists as well as for underdetermined equation systems (which have infinitely many solutions). For underdetermined equation systems you also get exactly one special solution.
+The single solution reported for systems with infinitely many solutions is exactly that solution used in the proof of Theorem RCLS (see http://linear.ups.edu/jsmath/0200/fcla-jsmath-2.00li19.html#theorem.RCLS), where the free variables are all set to zero, and the dependent variables come along with values from the final column of the row-reduced matrix. 
+
+uniqueLinSolve
+reports a solution if and only if an unique solution exists for the matrix equation system, style of input and output is exactly the same.
+
+
+Examples: 
+
+Input:
+matrix(1,1,"1"). matrix(1,2,"2"). matrix(1,3,"3").
+matrix(2,1,"4"). matrix(2,2,"5"). matrix(2,3,"6").
+b(1,"6"). b(2,"15").
+vektor(X,Y,Z) :- &linearSolve[matrix,b](X,Y,Z).
+
+You can also code vector b with arity 3:
+b(1,1,"6"). b(2,1,"15").
+
+Result:
+{vektor(1,1,"0"), vektor(2,1,"3"), vektor(3,1,"0"), b(1,"6"), b(2,"15"), matrix(1,1,"1"), matrix(1,2,"2"), matrix(1,3,"3"), matrix(2,1,"4"), matrix(2,2,"5"), matrix(2,3,"6")}
+
+------------------------------------------------
+
+Input:
+matrix(1,1,"1"). matrix(1,2,"-0.2"). matrix(1,3,"-0.2").
+matrix(2,1,"-0.4"). matrix(2,2,"0.8"). matrix(2,3,"-0.1").
+matrix(3,1,"0"). matrix(3,2,"-0.5"). matrix(3,3,"0.9").
+b(1,1,"7"). b(2,1,"12.5"). b(3,1,"16.5").
+
+vektor(X,Y,Z) :- &uniqueLinSolve[matrix,b](X,Y,Z).
+
+Result:
+{vektor(1,1,"20"), vektor(2,1,"30"), vektor(3,1,"35"), b(1,1,"7"), b(2,1,"12.5"), b(3,1,"16.5"), matrix(1,1,"1"), matrix(1,2,"-0.2"), matrix(1,3,"-0.2"), matrix(2,1,"-0.4"), matrix(2,2,"0.8"), matrix(2,3,"-0.1"), matrix(3,1,"0"), matrix(3,2,"-0.5"), matrix(3,3,"0.9")}
 

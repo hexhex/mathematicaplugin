@@ -7,8 +7,10 @@ plugin_LTLIBRARIES = libdlvhexmathematica.la
 # replace 'plugin' on the left side as above and
 # add all sources of your plugin
 #
-libdlvhexmathematica_la_SOURCES = mathematicaplugin.cpp \
-					mathlinksingleton.cpp
+libdlvhexmathematica_la_SOURCES = MathematicaPlugin.cpp \
+				  mathlinksingleton.cpp \
+				  LinearSolve.cpp \
+				  UniqueLinSolve.cpp
 
 #
 # extend compiler flags by CFLAGS of other needed libraries

@@ -12,14 +12,11 @@
 #include <sstream>
 #include <iostream>
 #include "mathlinksingleton.hpp"
+#include "LinearSolve.hpp"
 
 namespace dlvhex {
-        
-    class UniqueLinSolveAtom : public PluginAtom
-    {
-    public:
       
-      UniqueLinSolveAtom()
+      LinearSolveAtom::LinearSolveAtom()
       {
         // this Atom calculates a solutionvector x which solves the matrix
 	// equation Ax==b iff there exists an unique solution 
@@ -40,9 +37,9 @@ namespace dlvhex {
         
       }
 
-      virtual void
-
-      retrieve(const Query& query, Answer& answer) throw (PluginError)
+      void
+      LinearSolveAtom::retrieve(const Query& query, 
+				Answer& answer) throw (PluginError)
       {
 	Tuple parms = query.getInputTuple();
 	
@@ -123,9 +120,9 @@ namespace dlvhex {
 	//std::cout << "Extended MatrixRank expression: " << extendedMRankExpr << std::endl;
 	int extCoeffMRank = calculateRank(argc, argv, extendedMRankExpr);
 
-	//compare calculated ranks and number of matrix colums, iff they are equal, 
-	//a unique solution for the matrix equation exists
-	if ((coeffMRank == extCoeffMRank) && (coeffMRank == mColumns))
+	//compare calculated ranks and number of matrix colums, iff ranks are equal and smaller or equal than number of matrix columns, 
+	//a solution for the matrix equation exists
+	if ((coeffMRank == extCoeffMRank) && (coeffMRank <= mColumns))
 	  {
 	    std::string linSolExpr = toLinearSolveExpr(matrix, mRows, mColumns, constants, cRows, cColumns);
 	    std::vector <std::string> result;
@@ -155,7 +152,7 @@ namespace dlvhex {
 
 
       //check number and datatypes of every atom's arguments, count lines and columns of matrix
-      void evaluateMatrix(const AtomSet& set, int& rows, int& columns) throw (PluginError)
+  void LinearSolveAtom::evaluateMatrix(const AtomSet& set, int& rows, int& columns) throw (PluginError)
       {
 	rows = 0;
 	columns = 0;
@@ -192,7 +189,7 @@ namespace dlvhex {
 
       //check number and datatypes of every atom's arguments, 
       //count rows of vector
-      void evaluateVector(const AtomSet& set, int& rows, int& columns) throw (PluginError)
+  void LinearSolveAtom::evaluateVector(const AtomSet& set, int& rows, int& columns) throw (PluginError)
       {
 	rows = 0;
 	columns = 0;
@@ -232,7 +229,7 @@ namespace dlvhex {
       }
 
       //iterate the given AtomSet and sort the values of all Atoms into the 2-dim vector matrix, size of matrix is given by lines and columns
-      void convertMatrixToVector(const AtomSet& set, const int& rows, const int& columns, std::vector <std::vector<std::string> >& matrix)
+  void LinearSolveAtom::convertMatrixToVector(const AtomSet& set, const int& rows, const int& columns, std::vector <std::vector<std::string> >& matrix)
       {
 	//initialize the string array 
 	for (int i = 0; i < rows; i++)
@@ -265,7 +262,7 @@ namespace dlvhex {
 
       //evaluate the vector (filled with values of interpretation), 
       //each possible position in matrix or vector must be coded in interpretation
-      void checkVector(std::vector <std::vector<std::string> >& vektor, 
+  void LinearSolveAtom::checkVector(std::vector <std::vector<std::string> >& vektor, 
 		       const int& rows, const int&columns, 
 		       const std::string& predicateName) throw (PluginError)
       {
@@ -288,7 +285,7 @@ namespace dlvhex {
 
       //create a MatrixRank mathematica expression from coefficient matrix A
       //return value: expression as string, can be sent to mathematica for evaluation
-      std::string toMatrixRankExpr(const std::vector<std::vector<std::string> >&matrix,
+  std::string LinearSolveAtom::toMatrixRankExpr(const std::vector<std::vector<std::string> >&matrix,
 				   const int& mRows, const int& mColumns)
       {
 	std::string expression = "MatrixRank[{";
@@ -312,7 +309,7 @@ namespace dlvhex {
 
        //create a MatrixRank mathematica expression from extended coefficient matrix [A,b]
       //return value: expression as string, can be sent to mathematica for evaluation
-      std::string toMatrixRankExpr(const std::vector<std::vector<std::string> >&matrix,
+  std::string LinearSolveAtom::toMatrixRankExpr(const std::vector<std::vector<std::string> >&matrix,
 				   const int& mRows, const int& mColumns,
 				   const std::vector<std::vector<std::string> >&constants,
 				   const int& cRows, const int& cColumns)
@@ -345,7 +342,7 @@ namespace dlvhex {
 
       //create a LinearSolve mathematica expression from matrix and vector
       //return value: expression as string, can be sent to mathematica for evaluation
-      std::string toLinearSolveExpr(const std::vector<std::vector<std::string> >& matrix,
+  std::string LinearSolveAtom::toLinearSolveExpr(const std::vector<std::vector<std::string> >& matrix,
 			   const int& mRows, const int& mColumns,
 				    const std::vector<std::vector<std::string> >& vektor,
 				    const int& cRows, const int& cColumns)
@@ -400,7 +397,7 @@ namespace dlvhex {
 	}
 
 
-      void sendExpression(std::string expression) throw (PluginError)
+  void LinearSolveAtom::sendExpression(std::string expression) throw (PluginError)
       {
 	int packet;
 	//send expression to mathematica and wait for result
@@ -420,7 +417,7 @@ namespace dlvhex {
      	
       }
 
-      int calculateRank(int argc, char* argv[], std::string expression) throw (PluginError)
+  int LinearSolveAtom::calculateRank(int argc, char* argv[], std::string expression) throw (PluginError)
       {
 	int result;
 	int errCount = 0;
@@ -460,7 +457,7 @@ namespace dlvhex {
 	   return result;
       }
 
-      std::vector <std::string> calculateSolution(int argc, char* argv[], std::string expression) throw (PluginError)
+  std::vector <std::string> LinearSolveAtom::calculateSolution(int argc, char* argv[], std::string expression) throw (PluginError)
       {
 	std::vector <std::string> result;
 
@@ -627,69 +624,21 @@ namespace dlvhex {
 
 	}
 
-      std::string doubleToString(double real)
+  std::string LinearSolveAtom::doubleToString(double real)
       {
 	std::stringstream ss;
 	ss << real;
 	return ss.str();
       }
       
-      std::string intToString(int number)
+  std::string LinearSolveAtom::intToString(int number)
       {
 	std::stringstream ss;
 	ss << number;
 	return ss.str();
       }
-      
-    };
-      
-    
-    //
-    // A plugin must derive from PluginInterface
-    //
-    class MathematicaPlugin : public PluginInterface
-    {
-    public:
-      
-      //
-      // register all atoms of this plugin:
-      //
-      virtual void
-      getAtoms(AtomFunctionMap& a)
-      {
-	boost::shared_ptr<PluginAtom> uniqueLinSolve(new UniqueLinSolveAtom);
-	
-        a["uniqueLinSolve"] = uniqueLinSolve;
-
-      }
-      
-      virtual void
-      setOptions(bool doHelp, std::vector<std::string>& argv, std::ostream& out)
-      {
-      }
-      
-    };
-    
-    
-    //
-    // now instantiate the plugin
-    //
-    MathematicaPlugin theMathematicaPlugin;
-    
+     
 } // namespace dlvhex
 
-//
-// and let it be loaded by dlvhex!
-//
-extern "C"
-dlvhex::MathematicaPlugin*
-PLUGINIMPORTFUNCTION()
-{
-  dlvhex::theMathematicaPlugin.setPluginName(PACKAGE_TARNAME);
-  dlvhex::theMathematicaPlugin.setVersion(MATHEMATICAPLUGIN_MAJOR,
-					     MATHEMATICAPLUGIN_MINOR,
-					     MATHEMATICAPLUGIN_MICRO);
-  return new dlvhex::MathematicaPlugin();
-}
 
 

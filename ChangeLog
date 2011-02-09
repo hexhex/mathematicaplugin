@@ -1,3 +1,29 @@
+2011-02-09 Annemarie Goldmann <annemarie.goldmann@chello.at>
+
+	added second external atom: linearSolve, refactoring existing files for inheritance
+	* README: description of external atoms
+	* include/LinearSolve.hpp: new header file
+	* include/UniqueLinSolve.hpp: new header file
+	* include/Makefile.am: added new files
+	* src/LinearSolve.cpp: implementation of linearSolve atom
+	* src/UniqueLinSolve.cpp: same functionality but inherited
+	* src/MathematicaPlugin.cpp: Plugin in separate file
+	* src/Makefile.am: added new files
+
+	added testcases for testing new linearSolve atom
+	* examples/Makefile.am
+	* examples/errorLinSolve.hex
+	* examples/noSolutionLinSolve.hex
+	* examples/symbolsLinSolve.hex
+	* examples/underdet2LinSolve.hex
+	* examples/underdetermined2.hex
+	* examples/underdetLinSolve.hex
+	* examples/tests/symbolsLinSolve.out
+	* examples/tests/underdet2LinSolve.out
+	* examples/tests/underdetermined2.out
+	* examples/tests/underdetLinSolve.out
+	* examples/tests/mathematicaplugintests.test
+
 2011-02-08 Annemarie Goldmann <annemarie.goldmann@chello.at>
 
 	* examples/tests/answerset_compare.py: new file from Peter Schueller to improve the testsuite
